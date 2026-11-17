@@ -15,6 +15,25 @@ public class ModuleManager {
 
     public void registerDefaults() {
         register(new FpsModule());
+        String[][] catalog = {
+            {"CPS","HUD"},{"Keystrokes","HUD"},{"Armor Status","HUD"},{"Potion Effects","HUD"},
+            {"Coordinates","HUD"},{"Ping","HUD"},{"Clock","HUD"},{"Server Address","HUD"},
+            {"Memory","HUD"},{"Saturation","HUD"},{"Toggle Sprint","Movement"},{"Hit Color","Combat"},
+            {"Reach Display","HUD"},{"Combo Counter","Combat"},{"Target HUD","Combat"},{"Low Fire","Render"},
+            {"Hitboxes","Combat"},{"Hit Sounds","Combat"},{"Combat FPS","HUD"},{"Hit Bubbles","Combat"},
+            {"Hit Marker","Combat"},{"Damage Numbers","Combat"},{"Health Indicators","Combat"},{"Zoom","Render"},
+            {"Fullbright","Render"},{"Crosshair","Render"},{"Block Outline","Render"},{"Time Changer","World"},
+            {"Weather Changer","World"},{"Particles","Render"},{"Freelook","Render"},{"Cinematic Lyrics","Cosmetics"},
+            {"Auto GG","Misc"},{"Nick Hider","Misc"},{"Address Hider","Misc"},{"Waypoints","World"},
+            {"Item Physics","Render"},{"Friends","Misc"},{"Performance Panel","HUD"},{"Aspect Ratio","Render"},
+            {"Viewmodel","Render"},{"Perspective","Render"},{"Hurt Cam","Render"},{"Clear Water","Render"},
+            {"Color Saturation","Render"},{"Motion Blur","Render"},{"Kill Effects","Cosmetics"},{"Target ESP","Render"},
+            {"Jump Circles","Cosmetics"},{"Trails","Cosmetics"},{"China Hat","Cosmetics"},{"Aura","Render"},
+            {"Trajectories","Render"},{"Ambience","World"},{"Glint Color","Cosmetics"},{"Realistic Capes","Cosmetics"},
+            {"Title Tweaks","HUD"},{"Bossbar Tweaks","HUD"},{"Scoreboard Tweaks","HUD"},{"Nametags","Render"},
+            {"Friends Ingame","Misc"},{"Dynamic Island","HUD"},{"Client","Misc"},{"Theme","Cosmetics"},{"HUD Style","HUD"}
+        };
+        for (String[] entry : catalog) register(new CatalogModule(entry[0], entry[1]));
     }
 
     public void register(ClientModule module) { modules.add(module); }
