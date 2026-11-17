@@ -1,6 +1,7 @@
 package br.com.firedclient.ui;
 
 import br.com.firedclient.FiredClient;
+import br.com.firedclient.compat.OptiFineCompatibility;
 import br.com.firedclient.module.CatalogModule;
 import br.com.firedclient.module.ClientModule;
 import br.com.firedclient.module.impl.FpsModule;
@@ -199,6 +200,8 @@ public class ClickGui extends GuiScreen {
         drawString(fontRendererObj, "COLECAO FIRED", contentX + 12, panelTop + 255, 0xFFFF963B);
         drawString(fontRendererObj, "Os itens cosmeticos serao adicionados e testados nesta area.",
                 contentX + 12, panelTop + 270, 0xFFB7A69D);
+        drawString(fontRendererObj, "COMPATIBILIDADE: " + OptiFineCompatibility.getStatus(),
+                contentX + 12, panelTop + 285, 0xFFFFA04A);
     }
 
     private void drawSettings(int right) {
