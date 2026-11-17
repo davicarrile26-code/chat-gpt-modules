@@ -1,6 +1,7 @@
 package br.com.firedclient.module;
 
 import br.com.firedclient.module.impl.FpsModule;
+import br.com.firedclient.module.impl.FeatureModule;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -15,14 +16,20 @@ public class ModuleManager {
 
     public void registerDefaults() {
         register(new FpsModule());
+        register(new FeatureModule("Coordinates", "HUD"));
+        register(new FeatureModule("Ping", "HUD"));
+        register(new FeatureModule("Clock", "HUD"));
+        register(new FeatureModule("Server Address", "HUD"));
+        register(new FeatureModule("Memory", "HUD"));
+        register(new FeatureModule("Saturation", "HUD"));
+        register(new FeatureModule("Armor Status", "HUD"));
+        register(new FeatureModule("Potion Effects", "HUD"));
+        register(new FeatureModule("Toggle Sprint", "MOVEMENT"));
+        register(new FeatureModule("Fullbright", "RENDER"));
         String[][] catalog = {
-            {"CPS","HUD"},{"Keystrokes","HUD"},{"Armor Status","HUD"},{"Potion Effects","HUD"},
-            {"Coordinates","HUD"},{"Ping","HUD"},{"Clock","HUD"},{"Server Address","HUD"},
-            {"Memory","HUD"},{"Saturation","HUD"},{"Toggle Sprint","Movement"},{"Hit Color","Combat"},
             {"Reach Display","HUD"},{"Combo Counter","Combat"},{"Target HUD","Combat"},{"Low Fire","Render"},
             {"Hitboxes","Combat"},{"Hit Sounds","Combat"},{"Combat FPS","HUD"},{"Hit Bubbles","Combat"},
             {"Hit Marker","Combat"},{"Damage Numbers","Combat"},{"Health Indicators","Combat"},{"Zoom","Render"},
-            {"Fullbright","Render"},{"Crosshair","Render"},{"Block Outline","Render"},{"Time Changer","World"},
             {"Weather Changer","World"},{"Particles","Render"},{"Freelook","Render"},{"Cinematic Lyrics","Cosmetics"},
             {"Auto GG","Misc"},{"Nick Hider","Misc"},{"Address Hider","Misc"},{"Waypoints","World"},
             {"Item Physics","Render"},{"Friends","Misc"},{"Performance Panel","HUD"},{"Aspect Ratio","Render"},
