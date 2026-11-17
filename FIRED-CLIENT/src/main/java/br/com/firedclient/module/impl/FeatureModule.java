@@ -6,16 +6,18 @@ import br.com.firedclient.module.TickModule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/** Real, client-side quality-of-life features supported by vanilla 1.8.9. */
+/** Small client-side HUD and quality-of-life modules for Minecraft 1.8.9. */
 public class FeatureModule extends ClientModule implements HudModule, TickModule {
     private final String category;
     private float previousGamma;
     private boolean changedGamma;
+    private long stopwatchStarted;
 
     public FeatureModule(String name, String category) {
         super(name);
@@ -26,14 +28,13 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
 
     @Override
     protected void onEnable() {
-        if ("Fullbright".equals(getName())) {
-            Minecraft mc = Minecraft.getMinecraft();
-            if (mc != null) {
-                previousGamma = mc.gameSettings.gammaSetting;
-                changedGamma = true;
-                mc.gameSettings.gammaSetting = 100.0F;
-            }
+        Minecraft mc = Minecraft.getMinecraft();
+        if ("Fullbright".equals(getName()) && mc != null) {
+            previousGamma = mc.gameSettings.gammaSetting;
+            changedGamma = true;
+            mc.gameSettings.gammaSetting = 100.0F;
         }
+        if ("Stopwatch".equals(getName())) stopwatchStarted = System.currentTimeMillis();
     }
 
     @Override
@@ -65,62 +66,127 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
         Minecraft mc = Minecraft.getMinecraft();
         if (mc == null || mc.thePlayer == null || mc.theWorld == null) return;
         String value = getHudValue(mc);
-        if (value == null || value.length() == 0) return;
-        int y = getHudY();
-        mc.fontRendererObj.drawStringWithShadow(value, 4, y, 0xFFFFA04A);
+        if (value != null && value.length() > 0)
+            mc.fontRendererObj.drawStringWithShadow(value, 4, getHudY(), 0xFFFFA04A);
     }
 
     private int getHudY() {
-        String name = getName();
-        if ("Coordinates".equals(name)) return 16;
-        if ("Ping".equals(name)) return 28;
-        if ("Clock".equals(name)) return 40;
-        if ("Server Address".equals(name)) return 52;
-        if ("Memory".equals(name)) return 64;
-        if ("Saturation".equals(name)) return 76;
-        if ("Armor Status".equals(name)) return 88;
-        return 100;
+        String n = getName();
+        if ("Coordinates".equals(n)) return 16;
+        if ("Ping".equals(n)) return 28;
+        if ("Clock".equals(n)) return 40;
+        if ("Server Address".equals(n)) return 52;
+        if ("Memory".equals(n)) return 64;
+        if ("Saturation".equals(n)) return 76;
+        if ("Armor Status".equals(n)) return 88;
+        if ("Potion Effects".equals(n)) return 100;
+        if ("Keystrokes".equals(n)) return 112;
+        if ("Stopwatch".equals(n)) return 124;
+        if ("Item Counter".equals(n)) return 136;
+        if ("Direction".equals(n)) return 148;
+        if ("Biome".equals(n)) return 160;
+        if ("Speed".equals(n)) return 172;
+        if ("Durability".equals(n)) return 184;
+        if ("Entity Counter".equals(n)) return 196;
+        if ("Player Counter".equals(n)) return 208;
+        if ("Health".equals(n)) return 220;
+        if ("Food Level".equals(n)) return 232;
+        if ("World Time".equals(n)) return 244;
+        if ("Weather".equals(n)) return 256;
+        if ("Light Level".equals(n)) return 268;
+        return 280;
     }
 
     private String getHudValue(Minecraft mc) {
-        String name = getName();
-        if ("Coordinates".equals(name)) {
+        String n = getName();
+        if ("Coordinates".equals(n))
             return String.format("XYZ: %d, %d, %d", (int) mc.thePlayer.posX,
                     (int) mc.thePlayer.posY, (int) mc.thePlayer.posZ);
-        }
-        if ("Ping".equals(name)) {
+        if ("Ping".equals(n)) {
             if (mc.getNetHandler() == null) return "Ping: --";
             net.minecraft.client.network.NetworkPlayerInfo info =
                     mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
             return "Ping: " + (info == null ? "--" : info.getResponseTime() + " ms");
         }
-        if ("Clock".equals(name)) {
-            return "Hora: " + new SimpleDateFormat("HH:mm").format(new Date());
-        }
-        if ("Server Address".equals(name)) {
+        if ("Clock".equals(n)) return "Hora: " + new SimpleDateFormat("HH:mm").format(new Date());
+        if ("Server Address".equals(n))
             return mc.getCurrentServerData() == null ? "Servidor: Singleplayer"
                     : "Servidor: " + mc.getCurrentServerData().serverIP;
+        if ("Memory".equals(n)) {
+            Runtime r = Runtime.getRuntime();
+            return "Memoria: " + ((r.totalMemory() - r.freeMemory()) / 1048576L)
+                    + "/" + (r.maxMemory() / 1048576L) + " MB";
         }
-        if ("Memory".equals(name)) {
-            Runtime runtime = Runtime.getRuntime();
-            long used = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L;
-            return "Memoria: " + used + "/" + (runtime.maxMemory() / 1048576L) + " MB";
-        }
-        if ("Saturation".equals(name)) {
+        if ("Saturation".equals(n))
             return "Saturacao: " + mc.thePlayer.getFoodStats().getSaturationLevel();
-        }
-        if ("Armor Status".equals(name)) {
-            StringBuilder result = new StringBuilder("Armadura: ");
+        if ("Armor Status".equals(n)) {
+            StringBuilder b = new StringBuilder("Armadura: ");
             for (int i = 3; i >= 0; i--) {
                 ItemStack stack = mc.thePlayer.inventory.armorInventory[i];
-                result.append(stack == null ? "-" : stack.getDisplayName());
-                if (i > 0) result.append(" | ");
+                b.append(stack == null ? "-" : stack.getDisplayName());
+                if (i > 0) b.append(" | ");
             }
-            return result.toString();
+            return b.toString();
         }
-        if ("Potion Effects".equals(name)) {
+        if ("Potion Effects".equals(n))
             return "Efeitos: " + mc.thePlayer.getActivePotionEffects().size();
+        if ("Keystrokes".equals(n)) {
+            return "Teclas: W " + key(mc.gameSettings.keyBindForward.isKeyDown())
+                    + " A " + key(mc.gameSettings.keyBindLeft.isKeyDown())
+                    + " S " + key(mc.gameSettings.keyBindBack.isKeyDown())
+                    + " D " + key(mc.gameSettings.keyBindRight.isKeyDown())
+                    + " J " + key(mc.gameSettings.keyBindJump.isKeyDown());
+        }
+        if ("Stopwatch".equals(n)) {
+            long seconds = Math.max(0L, (System.currentTimeMillis() - stopwatchStarted) / 1000L);
+            return String.format("Cronometro: %02d:%02d", seconds / 60L, seconds % 60L);
+        }
+        if ("Item Counter".equals(n)) {
+            ItemStack held = mc.thePlayer.getHeldItem();
+            return "Item: " + (held == null ? "Nenhum" : held.getDisplayName() + " x" + held.stackSize);
+        }
+        if ("Direction".equals(n)) {
+            float yaw = (mc.thePlayer.rotationYaw % 360.0F + 360.0F) % 360.0F;
+            String[] dirs = {"Sul", "Oeste", "Norte", "Leste"};
+            return "Direcao: " + dirs[Math.round(yaw / 90.0F) % 4];
+        }
+        if ("Biome".equals(n)) {
+            BlockPos p = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+            return "Bioma: " + mc.theWorld.getBiomeGenForCoords(p).biomeName;
+        }
+        if ("Speed".equals(n)) {
+            double speed = Math.sqrt(mc.thePlayer.motionX * mc.thePlayer.motionX
+                    + mc.thePlayer.motionZ * mc.thePlayer.motionZ) * 20.0D;
+            return String.format("Velocidade: %.2f m/s", speed);
+        }
+        if ("Durability".equals(n)) {
+            ItemStack held = mc.thePlayer.getHeldItem();
+            if (held == null || !held.isItemStackDamageable()) return "Durabilidade: --";
+            return "Durabilidade: " + (held.getMaxDamage() - held.getItemDamage())
+                    + "/" + held.getMaxDamage();
+        }
+        if ("Entity Counter".equals(n))
+            return "Entidades: " + mc.theWorld.loadedEntityList.size();
+        if ("Player Counter".equals(n))
+            return "Jogadores: " + mc.theWorld.playerEntities.size();
+        if ("Health".equals(n))
+            return String.format("Vida: %.1f/%.1f", mc.thePlayer.getHealth(), mc.thePlayer.getMaxHealth());
+        if ("Food Level".equals(n))
+            return "Fome: " + mc.thePlayer.getFoodStats().getFoodLevel() + "/20";
+        if ("World Time".equals(n)) {
+            long time = mc.theWorld.getWorldTime() % 24000L;
+            long hours = (time / 1000L + 6L) % 24L;
+            long minutes = (time % 1000L) * 60L / 1000L;
+            return String.format("Horario: %02d:%02d", hours, minutes);
+        }
+        if ("Weather".equals(n))
+            return "Clima: " + (mc.theWorld.isRaining() ? "Chovendo" : "Limpo");
+        if ("Light Level".equals(n)) {
+            BlockPos p = new BlockPos(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+            return "Luz: " + mc.theWorld.getLightFromNeighbors(p);
         }
         return null;
     }
+
+    private String key(boolean down) { return down ? "[X]" : "[ ]"; }
 }
