@@ -38,7 +38,7 @@ public class ModuleManager {
             {"Jump Circles","Cosmetics"},{"Trails","Cosmetics"},{"China Hat","Cosmetics"},{"Aura","Render"},
             {"Trajectories","Render"},{"Ambience","World"},{"Glint Color","Cosmetics"},{"Realistic Capes","Cosmetics"},
             {"Title Tweaks","HUD"},{"Bossbar Tweaks","HUD"},{"Scoreboard Tweaks","HUD"},{"Nametags","Render"},
-            {"Friends Ingame","Misc"},{"Dynamic Island","HUD"},{"Client","Misc"},{"Theme","Cosmetics"},{"HUD Style","HUD"},{"Keystrokes","HUD"},{"CPS Counter","HUD"},{"Stopwatch","HUD"},{"Item Counter","HUD"},{"Block Overlay","Render"},{"Crosshair","Render"},{"Keybind Manager","Misc"}
+            {"Friends Ingame","Misc"},{"Dynamic Island","HUD"},{"Client","Misc"},{"Theme","Cosmetics"},{"HUD Style","HUD"},{"Keystrokes","HUD"},{"CPS Counter","HUD"},{"Stopwatch","HUD"},{"Item Counter","HUD"},{"Block Overlay","Render"},{"Crosshair","Render"}
         };
         for (String[] entry : catalog) register(new CatalogModule(entry[0], entry[1]));
     }
