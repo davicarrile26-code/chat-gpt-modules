@@ -1,0 +1,11 @@
+[
+  {
+    "modid": "firedclient",
+    "name": "FIRED CLIENT",
+    "description": "Client-side customization mod for Minecraft 1.8.9.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "authorList": ["FIRED CLIENT"],
+    "clientSideOnly": true
+  }
+]
