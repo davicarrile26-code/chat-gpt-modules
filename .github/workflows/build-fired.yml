@@ -1,0 +1,36 @@
+name: Build FIRED CLIENT
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'FIRED-CLIENT/**'
+      - '.github/workflows/build-fired.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Install Gradle 2.14.1
+        run: |
+          curl -L https://services.gradle.org/distributions/gradle-2.14.1-bin.zip -o /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /tmp
+
+      - name: Build mod
+        run: /tmp/gradle-2.14.1/bin/gradle -p FIRED-CLIENT build --no-daemon
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: FIRED-CLIENT-JAR
+          path: FIRED-CLIENT/build/libs/*.jar
+          if-no-files-found: error
