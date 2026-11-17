@@ -54,12 +54,12 @@ public class ClickGui extends GuiScreen {
         GlStateManager.scale(guiScale, guiScale, 1.0F);
         int right = panelLeft + PANEL_WIDTH, bottom = panelTop + PANEL_HEIGHT;
         drawRect(panelLeft, panelTop, right, bottom, 0xF00D0B0A);
-        drawGradientRect(panelLeft, panelTop, right, panelTop + 3, 0xFFFF3517, 0xFFFFA51C);
+        drawGradientRect(panelLeft, panelTop, right, panelTop + 3, 0xFFB5121B, 0xFFFF3B30);
         drawRect(panelLeft, panelTop + 3, right, panelTop + 49, 0xFF171211);
         drawRect(panelLeft, panelTop + 49, right, bottom, 0xF0120F0E);
-        drawGradientRect(panelLeft + 13, panelTop + 12, panelLeft + 39, panelTop + 38, 0xFF9D260F, 0xFFFF741B);
+        drawGradientRect(panelLeft + 13, panelTop + 12, panelLeft + 39, panelTop + 38, 0xFF7A1018, 0xFFE32636);
         drawCenteredString(fontRendererObj, "F", panelLeft + 26, panelTop + 19, 0xFFFFFFFF);
-        drawString(fontRendererObj, "FIRED CLIENT", panelLeft + 48, panelTop + 12, 0xFFFF963B);
+        drawString(fontRendererObj, "FIRED CLIENT", panelLeft + 48, panelTop + 12, 0xFFFF4D4D);
         drawString(fontRendererObj, "1.8.9  /  CLIENT MENU", panelLeft + 48, panelTop + 27, 0xFF9F8D84);
         drawTab(panelLeft + 330, panelTop + 13, 70, "MODS", tab == TAB_MODS);
         drawTab(panelLeft + 405, panelTop + 13, 102, "COSMETICOS", tab == TAB_COSMETICS);
@@ -72,9 +72,9 @@ public class ClickGui extends GuiScreen {
     }
 
     private void drawTab(int x, int y, int w, String label, boolean active) {
-        drawRect(x, y, x + w, y + 24, active ? 0xFF57251A : 0xFF241B18);
-        if (active) drawRect(x, y + 21, x + w, y + 24, 0xFFFF7624);
-        drawCenteredString(fontRendererObj, label, x + w / 2, y + 8, active ? 0xFFFFC18A : 0xFFB3A39A);
+        drawRect(x, y, x + w, y + 24, active ? 0xFF50151B : 0xFF211518);
+        if (active) drawRect(x, y + 21, x + w, y + 24, 0xFFE32636);
+        drawCenteredString(fontRendererObj, label, x + w / 2, y + 8, active ? 0xFFFFB0B0 : 0xFFB3A39A);
     }
 
     private void drawMods(int mouseX, int mouseY, int right, int bottom) {
@@ -86,13 +86,13 @@ public class ClickGui extends GuiScreen {
             boolean active = selectedCategory.equals(CATEGORIES[i]);
             boolean hovered = inside(mouseX, mouseY, sideX + 4, y - 4, panelLeft + SIDEBAR_WIDTH - 4, y + 17);
             if (active) {
-                drawRect(sideX + 4, y - 4, panelLeft + SIDEBAR_WIDTH - 4, y + 17, 0xFF542419);
-                drawRect(sideX + 4, y - 4, sideX + 7, y + 17, 0xFFFF7624);
-            } else if (hovered) drawRect(sideX + 4, y - 4, panelLeft + SIDEBAR_WIDTH - 4, y + 17, 0xFF2B201C);
-            drawString(fontRendererObj, CATEGORIES[i], sideX + 13, y + 2, active ? 0xFFFFB36B : 0xFFB7A69D);
+                drawRect(sideX + 4, y - 4, panelLeft + SIDEBAR_WIDTH - 4, y + 17, 0xFF50151B);
+                drawRect(sideX + 4, y - 4, sideX + 7, y + 17, 0xFFE32636);
+            } else if (hovered) drawRect(sideX + 4, y - 4, panelLeft + SIDEBAR_WIDTH - 4, y + 17, 0xFF30191D);
+            drawString(fontRendererObj, CATEGORIES[i], sideX + 13, y + 2, active ? 0xFFFF8585 : 0xFFB7A69D);
         }
-        drawString(fontRendererObj, "MODULOS", contentX, panelTop + 62, 0xFFFF963B);
-        drawString(fontRendererObj, "Clique para ativar  /  CFG para configurar", contentX + 66, panelTop + 62, 0xFF95837A);
+        drawString(fontRendererObj, "MODULOS", contentX, panelTop + 62, 0xFFFF4D4D);
+        drawString(fontRendererObj, "Clique para ativar  /  engrenagem para configurar", contentX + 66, panelTop + 62, 0xFF95837A);
         drawRect(contentX, panelTop + 78, right - 13, bottom - 28, 0xFF191413);
         List<ClientModule> modules = getFilteredModules();
         if (modules.isEmpty()) drawCenteredString(fontRendererObj, "NENHUM MODULO NESTA CATEGORIA",
@@ -103,7 +103,7 @@ public class ClickGui extends GuiScreen {
             ClientModule module = modules.get(index);
             int y = panelTop + 85 + row * ROW_HEIGHT;
             boolean hovered = inside(mouseX, mouseY, contentX + 5, y - 3, right - 18, y + 19);
-            if (hovered) drawRect(contentX + 5, y - 3, right - 18, y + 19, 0xFF2B201C);
+            if (hovered) drawRect(contentX + 5, y - 3, right - 18, y + 19, 0xFF30191D);
             String category = module instanceof CatalogModule ? ((CatalogModule) module).getCategory().toUpperCase()
                     : module instanceof FeatureModule ? ((FeatureModule) module).getCategory() : "HUD";
             drawString(fontRendererObj, module.getName(), contentX + 12, y + 2, 0xFFF0E5DE);
@@ -111,10 +111,10 @@ public class ClickGui extends GuiScreen {
             if (module instanceof CatalogModule) drawString(fontRendererObj, "EM BREVE", right - 112, y + 2, 0xFFB58B73);
             else {
                 boolean enabled = module.isEnabled();
-                drawRect(right - 75, y - 1, right - 43, y + 14, enabled ? 0xFF713019 : 0xFF332824);
+                drawRect(right - 75, y - 1, right - 43, y + 14, enabled ? 0xFF8F1822 : 0xFF332824);
                 drawString(fontRendererObj, enabled ? "ON" : "OFF", right - 68, y + 3, enabled ? 0xFFFFA04A : 0xFFAA9A91);
             }
-            drawGear(right - 31, y + 3, 0xFFFFA34A);
+            drawGear(right - 31, y + 3, 0xFFFF4D4D);
         }
         drawString(fontRendererObj, modules.size() + " MODULOS  /  SCROLL PARA NAVEGAR", contentX + 2, bottom - 25, 0xFF9C887F);
     }
@@ -131,20 +131,20 @@ public class ClickGui extends GuiScreen {
 
     private void drawCosmetics(int mouseX, int mouseY, int right, int bottom) {
         int x0 = panelLeft + 16;
-        drawString(fontRendererObj, "PERSONALIZACAO", x0, panelTop + 62, 0xFFFF963B);
+        drawString(fontRendererObj, "PERSONALIZACAO", x0, panelTop + 62, 0xFFFF4D4D);
         drawString(fontRendererObj, "Cosmeticos FIRED e colecoes de parceiros", x0 + 112, panelTop + 62, 0xFF95837A);
         for (int i = 0; i < COSMETIC_SECTIONS.length; i++) {
             int x = x0 + (i % 3) * 164, y = panelTop + 86 + (i / 3) * 75;
             boolean active = selectedCosmeticSection == i, hovered = inside(mouseX, mouseY, x, y, x + 151, y + 61);
-            drawRect(x, y, x + 151, y + 61, active ? 0xFF542419 : hovered ? 0xFF30211C : 0xFF211815);
-            if (active) drawRect(x, y + 57, x + 151, y + 61, 0xFFFF7624);
-            drawRect(x + 10, y + 10, x + 39, y + 39, 0xFF713019);
-            drawCenteredString(fontRendererObj, String.valueOf(i + 1), x + 24, y + 21, 0xFFFFB36B);
-            drawString(fontRendererObj, COSMETIC_SECTIONS[i], x + 48, y + 13, active ? 0xFFFFC18A : 0xFFE6D8D0);
+            drawRect(x, y, x + 151, y + 61, active ? 0xFF50151B : hovered ? 0xFF30211C : 0xFF211815);
+            if (active) drawRect(x, y + 57, x + 151, y + 61, 0xFFE32636);
+            drawRect(x + 10, y + 10, x + 39, y + 39, 0xFF8F1822);
+            drawCenteredString(fontRendererObj, String.valueOf(i + 1), x + 24, y + 21, 0xFFFF8585);
+            drawString(fontRendererObj, COSMETIC_SECTIONS[i], x + 48, y + 13, active ? 0xFFFFB0B0 : 0xFFE6D8D0);
             drawString(fontRendererObj, "EM DESENVOLVIMENTO", x + 48, y + 29, 0xFFAA8C7D);
         }
         drawRect(x0, panelTop + 246, right - 16, bottom - 28, 0xFF191413);
-        drawString(fontRendererObj, "COLECAO FIRED", x0 + 12, panelTop + 255, 0xFFFF963B);
+        drawString(fontRendererObj, "COLECAO FIRED", x0 + 12, panelTop + 255, 0xFFFF4D4D);
         drawString(fontRendererObj, "Os itens cosmeticos serao adicionados e testados nesta area.", x0 + 12, panelTop + 270, 0xFFB7A69D);
         drawString(fontRendererObj, "COMPATIBILIDADE: " + OptiFineCompatibility.getStatus(), x0 + 12, panelTop + 285, 0xFFFFA04A);
     }
@@ -152,14 +152,14 @@ public class ClickGui extends GuiScreen {
     private void drawSettings(int right) {
         int x = right - 190, y = panelTop + 58;
         drawRect(x, y, right - 12, panelTop + 190, 0xFF251916);
-        drawRect(x, y, right - 12, y + 3, 0xFFFF7624);
-        drawString(fontRendererObj, settingsModule.getName().toUpperCase(), x + 10, y + 12, 0xFFFFA34A);
+        drawRect(x, y, right - 12, y + 3, 0xFFE32636);
+        drawString(fontRendererObj, settingsModule.getName().toUpperCase(), x + 10, y + 12, 0xFFFF4D4D);
         drawString(fontRendererObj, "CONFIGURACOES", x + 10, y + 26, 0xFFB7A69D);
         if (settingsModule instanceof FpsModule) {
             drawOption(x + 10, y + 51, "Mostrar FPS", FpsModule.showFps);
             drawOption(x + 10, y + 72, "Background", FpsModule.showBackground);
         } else drawString(fontRendererObj, "Sem opcoes adicionais", x + 10, y + 55, 0xFFB7A69D);
-        drawString(fontRendererObj, "[ FECHAR ]", x + 10, y + 108, 0xFFFF963B);
+        drawString(fontRendererObj, "[ FECHAR ]", x + 10, y + 108, 0xFFFF4D4D);
     }
 
 
