@@ -157,11 +157,18 @@ public class ClickGui extends GuiScreen {
             drawRect(x + 10, y + 10, x + 39, y + 39, 0xFF8F1822);
             drawCenteredString(fontRendererObj, String.valueOf(i + 1), x + 24, y + 21, 0xFFFF8585);
             drawString(fontRendererObj, COSMETIC_SECTIONS[i], x + 48, y + 13, active ? 0xFFFFB0B0 : 0xFFE6D8D0);
-            drawString(fontRendererObj, "EM DESENVOLVIMENTO", x + 48, y + 29, 0xFFAA8C7D);
+            ClientModule effect = i == 3 ? FiredClient.MODULES.getByName("Trails")
+                    : i == 4 ? FiredClient.MODULES.getByName("Aura") : null;
+            String status = effect == null ? "EM BREVE" : effect.isEnabled() ? "ATIVO" : "CLIQUE PARA ATIVAR";
+            int statusColor = effect == null ? 0xFFAA8C7D : effect.isEnabled() ? 0xFFFF5555 : 0xFFE0A0A0;
+            drawString(fontRendererObj, status, x + 48, y + 29, statusColor);
         }
         drawRect(x0, panelTop + 246, right - 16, bottom - 28, 0xFF191413);
         drawString(fontRendererObj, "COLECAO FIRED", x0 + 12, panelTop + 255, 0xFFFF4D4D);
-        drawString(fontRendererObj, "Os itens cosmeticos serao adicionados e testados nesta area.", x0 + 12, panelTop + 270, 0xFFB7A69D);
+        String detail = selectedCosmeticSection == 3 ? "Trail de fogo: particulas acompanham seus passos."
+                : selectedCosmeticSection == 4 ? "Aura de fogo: particulas giram ao redor do seu personagem."
+                : "Este cosmético ficará bloqueado até ser liberado pela equipe FIRED.";
+        drawString(fontRendererObj, detail, x0 + 12, panelTop + 270, 0xFFB7A69D);
         drawString(fontRendererObj, "COMPATIBILIDADE: " + OptiFineCompatibility.getStatus(), x0 + 12, panelTop + 285, 0xFFFFA04A);
     }
 
@@ -250,7 +257,13 @@ public class ClickGui extends GuiScreen {
                 int x0 = panelLeft + 16;
                 for (int i = 0; i < COSMETIC_SECTIONS.length; i++) {
                     int x = x0 + (i % 3) * 164, y = panelTop + 86 + (i / 3) * 75;
-                    if (inside(mouseX, mouseY, x, y, x + 151, y + 61)) { selectedCosmeticSection = i; break; }
+                    if (inside(mouseX, mouseY, x, y, x + 151, y + 61)) {
+                        selectedCosmeticSection = i;
+                        ClientModule effect = i == 3 ? FiredClient.MODULES.getByName("Trails")
+                                : i == 4 ? FiredClient.MODULES.getByName("Aura") : null;
+                        if (effect != null) effect.toggle();
+                        break;
+                    }
                 }
             }
         }
