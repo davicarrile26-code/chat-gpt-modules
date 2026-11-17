@@ -26,6 +26,22 @@ public class ModuleManager {
         register(new FeatureModule("Potion Effects", "HUD"));
         register(new FeatureModule("Toggle Sprint", "MOVEMENT"));
         register(new FeatureModule("Fullbright", "RENDER"));
+
+        register(new FeatureModule("Keystrokes", "HUD"));
+        register(new FeatureModule("Stopwatch", "HUD"));
+        register(new FeatureModule("Item Counter", "HUD"));
+        register(new FeatureModule("Direction", "HUD"));
+        register(new FeatureModule("Biome", "HUD"));
+        register(new FeatureModule("Speed", "HUD"));
+        register(new FeatureModule("Durability", "HUD"));
+        register(new FeatureModule("Entity Counter", "HUD"));
+        register(new FeatureModule("Player Counter", "HUD"));
+        register(new FeatureModule("Health", "HUD"));
+        register(new FeatureModule("Food Level", "HUD"));
+        register(new FeatureModule("World Time", "HUD"));
+        register(new FeatureModule("Weather", "HUD"));
+        register(new FeatureModule("Light Level", "HUD"));
+
         String[][] catalog = {
             {"Reach Display","HUD"},{"Combo Counter","Combat"},{"Target HUD","Combat"},{"Low Fire","Render"},
             {"Hitboxes","Combat"},{"Hit Sounds","Combat"},{"Combat FPS","HUD"},{"Hit Bubbles","Combat"},
@@ -38,7 +54,9 @@ public class ModuleManager {
             {"Jump Circles","Cosmetics"},{"Trails","Cosmetics"},{"China Hat","Cosmetics"},{"Aura","Render"},
             {"Trajectories","Render"},{"Ambience","World"},{"Glint Color","Cosmetics"},{"Realistic Capes","Cosmetics"},
             {"Title Tweaks","HUD"},{"Bossbar Tweaks","HUD"},{"Scoreboard Tweaks","HUD"},{"Nametags","Render"},
-            {"Friends Ingame","Misc"},{"Dynamic Island","HUD"},{"Client","Misc"},{"Theme","Cosmetics"},{"HUD Style","HUD"},{"Keystrokes","HUD"},{"CPS Counter","HUD"},{"Stopwatch","HUD"},{"Item Counter","HUD"},{"Block Overlay","Render"},{"Crosshair","Render"}
+            {"Friends Ingame","Misc"},{"Dynamic Island","HUD"},{"Client","Misc"},{"Theme","Cosmetics"},{"HUD Style","HUD"},
+            {"CPS Counter","HUD"},{"Block Overlay","Render"},{"Crosshair","Render"},{"Reach Display Plus","HUD"},
+            {"Auto Walk","Movement"},{"Auto Tool","Misc"},{"Item Alerts","HUD"}
         };
         for (String[] entry : catalog) register(new CatalogModule(entry[0], entry[1]));
     }
