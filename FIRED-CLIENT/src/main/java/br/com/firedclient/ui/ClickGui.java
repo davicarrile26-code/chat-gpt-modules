@@ -86,7 +86,6 @@ public class ClickGui extends GuiScreen {
 
         if (tab == TAB_MODS) drawMods(mouseX, mouseY);
         else drawCosmetics(mouseX, mouseY);
-        if (settingsModule != null) drawSettings();
 
         drawString(fontRendererObj, "FIRED CLIENT  •  PERSONALIZE SUA EXPERIENCIA",
                 16, BASE_H - 17, 0xFF626B76);
@@ -276,22 +275,6 @@ public class ClickGui extends GuiScreen {
         drawRect(164, 350, 698, 391, 0xFF1B2027);
         drawString(fontRendererObj, "STATUS DO CLIENT", 178, 359, 0xFFFF7654);
         drawString(fontRendererObj, "OptiFine: " + OptiFineCompatibility.getStatus(), 178, 375, 0xFF9AA4AF);
-    }
-
-    private void drawSettings() {
-        // Settings are drawn in the main content region; card grid remains underneath.
-        drawRect(164, 108, 704, 394, 0xFF171C23);
-        drawRect(164, 108, 704, 110, 0xFFFF573D);
-        drawString(fontRendererObj, "CONFIGURACOES DO MOD", 184, 128, 0xFFFF7654);
-        drawString(fontRendererObj, settingsModule.getName(), 184, 151, 0xFFF1F2F4);
-        if (settingsModule instanceof FpsModule) {
-            drawSettingLine(184, 210, "Mostrar FPS", FpsModule.showFps);
-            drawSettingLine(184, 244, "Mostrar fundo", FpsModule.showBackground);
-        } else {
-            drawString(fontRendererObj, "Nenhuma opcao adicional disponivel para este mod.", 184, 207, 0xFFB7A6A0);
-        }
-        drawRect(184, 350, 284, 378, 0xFF3A2023);
-        drawCenteredString(fontRendererObj, "VOLTAR", 234, 360, 0xFFFF9277);
     }
 
     private List<ClientModule> getFilteredModules() {
