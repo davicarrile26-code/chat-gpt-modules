@@ -241,9 +241,9 @@ public class ClickGui extends GuiScreen {
         if (searchField != null) searchField.mouseClicked(mouseX, mouseY, mouseButton);
         if (mouseButton == 0) {
             int right = panelLeft + PANEL_WIDTH;
-            if (inside(mouseX, mouseY, panelLeft + 330, panelTop + 13, panelLeft + 400, panelTop + 37)) {
+            if (inside(mouseX, mouseY, panelLeft + 278, panelTop + 13, panelLeft + 348, panelTop + 37)) {
                 tab = TAB_MODS; settingsModule = null;
-            } else if (inside(mouseX, mouseY, panelLeft + 405, panelTop + 13, panelLeft + 507, panelTop + 37)) {
+            } else if (inside(mouseX, mouseY, panelLeft + 352, panelTop + 13, panelLeft + 454, panelTop + 37)) {
                 tab = TAB_COSMETICS; settingsModule = null;
             } else if (tab == TAB_MODS && settingsModule != null) {
                 int x = right - 190, y = panelTop + 58;
