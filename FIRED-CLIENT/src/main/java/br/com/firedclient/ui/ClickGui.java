@@ -131,15 +131,24 @@ public class ClickGui extends GuiScreen {
             drawRect(164, 108, 704, 110, 0xFFFF573D);
             drawString(fontRendererObj, "CONFIGURACOES DO MOD", 184, 128, 0xFFFF7654);
             drawString(fontRendererObj, settingsModule.getName(), 184, 151, 0xFFF1F2F4);
+            String moduleCategory = getCategory(settingsModule);
             drawString(fontRendererObj, settingsModule instanceof CatalogModule
-                    ? "Este recurso ainda esta no catalogo." : "Opcoes disponiveis para este mod", 184, 166, 0xFF89939F);
+                    ? "RECURSO PLANEJADO  /  " + moduleCategory
+                    : "CONFIGURACOES  /  " + moduleCategory, 184, 166, 0xFF89939F);
+            if (!(settingsModule instanceof CatalogModule)) {
+                drawSettingLine(184, 190, "Ativar mod", settingsModule.isEnabled());
+            }
             if (settingsModule instanceof FpsModule) {
-                drawSettingLine(184, 210, "Mostrar FPS", FpsModule.showFps);
-                drawSettingLine(184, 244, "Mostrar fundo", FpsModule.showBackground);
+                drawSettingLine(184, 230, "Mostrar FPS", FpsModule.showFps);
+                drawSettingLine(184, 264, "Mostrar fundo", FpsModule.showBackground);
+                drawString(fontRendererObj, "As alteracoes sao aplicadas imediatamente.", 184, 310, 0xFF89939F);
             } else if (settingsModule instanceof CatalogModule) {
-                drawString(fontRendererObj, "Este mod ainda nao pode ser ativado.", 184, 207, 0xFFB7A6A0);
+                drawString(fontRendererObj, "Este recurso ainda nao foi implementado.", 184, 207, 0xFFB7A6A0);
+                drawString(fontRendererObj, "A pagina individual ja esta preparada.", 184, 224, 0xFF89939F);
             } else {
-                drawString(fontRendererObj, "Este mod nao possui ajustes extras no momento.", 184, 207, 0xFFB7A6A0);
+                drawString(fontRendererObj, "Este mod esta disponivel para ativacao.", 184, 238, 0xFFE5E9ED);
+                drawString(fontRendererObj, "Opcoes avancadas serao exibidas aqui", 184, 258, 0xFF89939F);
+                drawString(fontRendererObj, "quando forem implementadas para este mod.", 184, 273, 0xFF89939F);
             }
             drawRect(184, 350, 284, 378, 0xFF3A2023);
             drawCenteredString(fontRendererObj, "VOLTAR", 234, 360, 0xFFFF9277);
@@ -334,9 +343,11 @@ public class ClickGui extends GuiScreen {
             } else if (tab == TAB_MODS) {
                 if (settingsModule != null) {
                     if (inside(mx, my, 184, 350, 284, 378)) settingsModule = null;
+                    else if (!(settingsModule instanceof CatalogModule)
+                            && inside(mx, my, 180, 176, 470, 218)) settingsModule.toggle();
                     else if (settingsModule instanceof FpsModule) {
-                        if (inside(mx, my, 180, 194, 470, 229)) FpsModule.showFps = !FpsModule.showFps;
-                        else if (inside(mx, my, 180, 228, 470, 263))
+                        if (inside(mx, my, 180, 214, 470, 252)) FpsModule.showFps = !FpsModule.showFps;
+                        else if (inside(mx, my, 180, 248, 470, 286))
                             FpsModule.showBackground = !FpsModule.showBackground;
                     }
                 } else {
