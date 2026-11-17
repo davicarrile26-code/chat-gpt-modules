@@ -7,6 +7,7 @@ import br.com.firedclient.module.ClientModule;
 import br.com.firedclient.module.impl.FpsModule;
 import br.com.firedclient.module.impl.FeatureModule;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -20,12 +21,20 @@ public class ClickGui extends GuiScreen {
     private static final String[] CATEGORIES = {"TODOS","HUD","RENDER","COMBAT","MOVEMENT","WORLD","MISC","COSMETICS"};
     private static final String[] COSMETIC_SECTIONS = {"CAPES","ASAS","CHAPEUS","TRAILS","AURAS"};
     private int tab = TAB_MODS, panelLeft, panelTop, scroll, selectedCosmeticSection;
+    private float guiScale = 1.0F;
+    private int guiOffsetX, guiOffsetY;
     private String selectedCategory = "TODOS";
     private ClientModule settingsModule;
 
     @Override public void initGui() {
-        panelLeft = width / 2 - PANEL_WIDTH / 2;
-        panelTop = height / 2 - PANEL_HEIGHT / 2;
+        // Mantem o painel dentro da area visivel, inclusive em janelas pequenas.
+        guiScale = Math.min(1.0F, Math.min((width - 20.0F) / PANEL_WIDTH,
+                (height - 20.0F) / PANEL_HEIGHT));
+        guiScale = Math.max(0.1F, guiScale);
+        guiOffsetX = (int) ((width - PANEL_WIDTH * guiScale) / 2.0F);
+        guiOffsetY = (int) ((height - PANEL_HEIGHT * guiScale) / 2.0F);
+        panelLeft = 0;
+        panelTop = 0;
         scroll = 0;
     }
 
@@ -40,6 +49,9 @@ public class ClickGui extends GuiScreen {
 
     @Override public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(guiOffsetX, guiOffsetY, 0.0F);
+        GlStateManager.scale(guiScale, guiScale, 1.0F);
         int right = panelLeft + PANEL_WIDTH, bottom = panelTop + PANEL_HEIGHT;
         drawRect(panelLeft, panelTop, right, bottom, 0xF00D0B0A);
         drawGradientRect(panelLeft, panelTop, right, panelTop + 3, 0xFFFF3517, 0xFFFFA51C);
@@ -55,6 +67,7 @@ public class ClickGui extends GuiScreen {
         else drawCosmetics(mouseX, mouseY, right, bottom);
         if (settingsModule != null) drawSettings(right);
         drawString(fontRendererObj, "RSHIFT  /  FECHAR", panelLeft + 14, bottom - 14, 0xFF88766E);
+        GlStateManager.popMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -169,6 +182,8 @@ public class ClickGui extends GuiScreen {
     private boolean inside(int mx, int my, int l, int t, int r, int b) { return mx >= l && mx <= r && my >= t && my <= b; }
 
     @Override protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        mouseX = (int) ((mouseX - guiOffsetX) / guiScale);
+        mouseY = (int) ((mouseY - guiOffsetY) / guiScale);
         if (mouseButton == 0) {
             int right = panelLeft + PANEL_WIDTH;
             if (inside(mouseX, mouseY, panelLeft + 330, panelTop + 13, panelLeft + 400, panelTop + 37)) {
