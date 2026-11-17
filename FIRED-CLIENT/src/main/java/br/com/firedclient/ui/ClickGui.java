@@ -59,16 +59,16 @@ public class ClickGui extends GuiScreen {
         GlStateManager.translate(guiOffsetX, guiOffsetY, 0.0F);
         GlStateManager.scale(guiScale, guiScale, 1.0F);
         int right = panelLeft + PANEL_WIDTH, bottom = panelTop + PANEL_HEIGHT;
-        drawRect(panelLeft, panelTop, right, bottom, 0xF00D0B0A);
-        drawGradientRect(panelLeft, panelTop, right, panelTop + 3, 0xFFB5121B, 0xFFFF3B30);
-        drawRect(panelLeft, panelTop + 3, right, panelTop + 49, 0xFF171211);
-        drawRect(panelLeft, panelTop + 49, right, bottom, 0xF0120F0E);
-        drawGradientRect(panelLeft + 13, panelTop + 12, panelLeft + 39, panelTop + 38, 0xFF7A1018, 0xFFE32636);
-        drawCenteredString(fontRendererObj, "F", panelLeft + 26, panelTop + 19, 0xFFFFFFFF);
-        drawString(fontRendererObj, "FIRED CLIENT", panelLeft + 48, panelTop + 12, 0xFFFF4D4D);
-        drawString(fontRendererObj, "1.8.9  /  CLIENT MENU", panelLeft + 48, panelTop + 27, 0xFF9F8D84);
-        drawTab(panelLeft + 330, panelTop + 13, 70, "MODS", tab == TAB_MODS);
-        drawTab(panelLeft + 405, panelTop + 13, 102, "COSMETICOS", tab == TAB_COSMETICS);
+        drawRect(panelLeft, panelTop, right, bottom, 0xF0101216);
+        drawGradientRect(panelLeft, panelTop, right, panelTop + 2, 0xFFE33A32, 0xFFFF8742);
+        drawRect(panelLeft, panelTop + 2, right, panelTop + 49, 0xFF191C22);
+        drawRect(panelLeft, panelTop + 49, right, bottom, 0xF013161B);
+        drawRect(panelLeft + 1, panelTop + 49, right - 1, panelTop + 50, 0xFF2B3038);
+        drawFireLogo(panelLeft + 13, panelTop + 11);
+        drawString(fontRendererObj, "FIRED CLIENT", panelLeft + 48, panelTop + 12, 0xFFFF6848);
+        drawString(fontRendererObj, "MINECRAFT 1.8.9", panelLeft + 48, panelTop + 27, 0xFF9CA3AA);
+        drawTab(panelLeft + 278, panelTop + 13, 70, "MODS", tab == TAB_MODS);
+        drawTab(panelLeft + 352, panelTop + 13, 102, "COSMETICOS", tab == TAB_COSMETICS);
         if (tab == TAB_MODS) drawMods(mouseX, mouseY, right, bottom);
         else drawCosmetics(mouseX, mouseY, right, bottom);
         if (settingsModule != null) drawSettings(right);
@@ -78,15 +78,33 @@ public class ClickGui extends GuiScreen {
     }
 
     private void drawTab(int x, int y, int w, String label, boolean active) {
-        drawRect(x, y, x + w, y + 24, active ? 0xFF50151B : 0xFF211518);
-        if (active) drawRect(x, y + 21, x + w, y + 24, 0xFFE32636);
-        drawCenteredString(fontRendererObj, label, x + w / 2, y + 8, active ? 0xFFFFB0B0 : 0xFFB3A39A);
+        if (active) {
+            drawRect(x, y + 21, x + w, y + 24, 0xFFFF573D);
+            drawString(fontRendererObj, label, x + (w - fontRendererObj.getStringWidth(label)) / 2,
+                    y + 7, 0xFFFFE4DC);
+        } else {
+            drawString(fontRendererObj, label, x + (w - fontRendererObj.getStringWidth(label)) / 2,
+                    y + 7, 0xFF9CA3AA);
+        }
+    }
+
+    /** Marca provisoria desenhada em pixel-art; usa a identidade FIRED sem reutilizar o logo Lunar. */
+    private void drawFireLogo(int x, int y) {
+        drawRect(x + 8, y, x + 17, y + 5, 0xFFFFA044);
+        drawRect(x + 5, y + 5, x + 20, y + 10, 0xFFFF6A35);
+        drawRect(x + 3, y + 10, x + 22, y + 19, 0xFFE52B32);
+        drawRect(x + 6, y + 19, x + 19, y + 24, 0xFFB91528);
+        drawRect(x + 9, y + 6, x + 14, y + 12, 0xFFFFC05A);
+        drawRect(x + 8, y + 12, x + 16, y + 19, 0xFFFF8A32);
+        drawRect(x + 11, y + 15, x + 15, y + 21, 0xFFFFD18A);
+        drawRect(x + 0, y + 12, x + 4, y + 17, 0xFFE52B32);
+        drawRect(x + 21, y + 10, x + 25, y + 16, 0xFFE52B32);
     }
 
     private void drawMods(int mouseX, int mouseY, int right, int bottom) {
         int sideX = panelLeft + 10, sideTop = panelTop + 60, contentX = panelLeft + SIDEBAR_WIDTH + 18;
-        drawRect(sideX, sideTop, panelLeft + SIDEBAR_WIDTH, bottom - 27, 0xFF191413);
-        drawString(fontRendererObj, "CATEGORIAS", sideX + 9, sideTop + 10, 0xFFFF8B32);
+        drawRect(sideX, sideTop, panelLeft + SIDEBAR_WIDTH, bottom - 27, 0xFF1A1E24);
+        drawString(fontRendererObj, "CATEGORIAS", sideX + 9, sideTop + 10, 0xFFFF925C);
         for (int i = 0; i < CATEGORIES.length; i++) {
             int y = sideTop + 29 + i * 25;
             boolean active = selectedCategory.equals(CATEGORIES[i]);
@@ -106,7 +124,8 @@ public class ClickGui extends GuiScreen {
         searchField.drawTextBox();
         if (searchField.getText().isEmpty() && !searchField.isFocused())
             drawString(fontRendererObj, "Pesquisar mods", searchX + 19, searchY + 5, 0xFF8E7D76);
-        drawRect(contentX, panelTop + 78, right - 13, bottom - 28, 0xFF191413);
+        drawRect(contentX, panelTop + 78, right - 13, bottom - 28, 0xFF1A1E24);
+        drawRect(contentX, panelTop + 78, right - 13, panelTop + 79, 0xFF303640);
         List<ClientModule> modules = getFilteredModules();
         if (modules.isEmpty()) drawCenteredString(fontRendererObj, "NENHUM MODULO NESTA CATEGORIA",
                 contentX + (right - contentX) / 2, panelTop + 120, 0xFFB7A69D);
@@ -116,7 +135,7 @@ public class ClickGui extends GuiScreen {
             ClientModule module = modules.get(index);
             int y = panelTop + 85 + row * ROW_HEIGHT;
             boolean hovered = inside(mouseX, mouseY, contentX + 5, y - 3, right - 18, y + 19);
-            if (hovered) drawRect(contentX + 5, y - 3, right - 18, y + 19, 0xFF30191D);
+            if (hovered) drawRect(contentX + 5, y - 3, right - 18, y + 19, 0xFF29242A);
             String category = module instanceof CatalogModule ? ((CatalogModule) module).getCategory().toUpperCase()
                     : module instanceof FeatureModule ? ((FeatureModule) module).getCategory() : "HUD";
             drawString(fontRendererObj, module.getName(), contentX + 12, y + 2, 0xFFF0E5DE);
@@ -124,8 +143,8 @@ public class ClickGui extends GuiScreen {
             if (module instanceof CatalogModule) drawString(fontRendererObj, "EM BREVE", right - 112, y + 2, 0xFFB58B73);
             else {
                 boolean enabled = module.isEnabled();
-                drawRect(right - 75, y - 1, right - 43, y + 14, enabled ? 0xFF8F1822 : 0xFF332824);
-                drawString(fontRendererObj, enabled ? "ON" : "OFF", right - 68, y + 3, enabled ? 0xFFFFA04A : 0xFFAA9A91);
+                drawRect(right - 75, y - 1, right - 43, y + 14, enabled ? 0xFF9B3029 : 0xFF343A43);
+                drawString(fontRendererObj, enabled ? "ON" : "OFF", right - 68, y + 3, enabled ? 0xFFFFB078 : 0xFFB5BEC8);
             }
             drawGear(right - 31, y + 3, 0xFFFF4D4D);
         }
@@ -163,7 +182,7 @@ public class ClickGui extends GuiScreen {
             int statusColor = effect == null ? 0xFFAA8C7D : effect.isEnabled() ? 0xFFFF5555 : 0xFFE0A0A0;
             drawString(fontRendererObj, status, x + 48, y + 29, statusColor);
         }
-        drawRect(x0, panelTop + 246, right - 16, bottom - 28, 0xFF191413);
+        drawRect(x0, panelTop + 246, right - 16, bottom - 28, 0xFF1A1E24);
         drawString(fontRendererObj, "COLECAO FIRED", x0 + 12, panelTop + 255, 0xFFFF4D4D);
         String detail = selectedCosmeticSection == 3 ? "Trail de fogo: particulas acompanham seus passos."
                 : selectedCosmeticSection == 4 ? "Aura de fogo: particulas giram ao redor do seu personagem."
@@ -174,8 +193,8 @@ public class ClickGui extends GuiScreen {
 
     private void drawSettings(int right) {
         int x = right - 190, y = panelTop + 58;
-        drawRect(x, y, right - 12, panelTop + 190, 0xFF251916);
-        drawRect(x, y, right - 12, y + 3, 0xFFE32636);
+        drawRect(x, y, right - 12, panelTop + 190, 0xFF20242B);
+        drawRect(x, y, right - 12, y + 3, 0xFFFF573D);
         drawString(fontRendererObj, settingsModule.getName().toUpperCase(), x + 10, y + 12, 0xFFFF4D4D);
         drawString(fontRendererObj, "CONFIGURACOES", x + 10, y + 26, 0xFFB7A69D);
         if (settingsModule instanceof FpsModule) {
