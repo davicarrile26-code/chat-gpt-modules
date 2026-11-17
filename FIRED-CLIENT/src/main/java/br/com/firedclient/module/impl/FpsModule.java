@@ -8,8 +8,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 public class FpsModule extends ClientModule implements HudModule {
     public static boolean showFps = true;
     public static boolean showBackground = false;
-    public static int textColor = 0xFF55DDFF;
-    public static int backgroundColor = 0x99000000;
+    public static int textColor = 0xFFFF7654;
+    public static int backgroundColor = 0xCC171A20;
 
     public FpsModule() { super("FPS"); }
 
