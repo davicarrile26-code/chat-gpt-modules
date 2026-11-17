@@ -101,7 +101,7 @@ public class ClickGui extends GuiScreen {
                 drawRect(right - 75, y - 1, right - 43, y + 14, enabled ? 0xFF713019 : 0xFF332824);
                 drawString(fontRendererObj, enabled ? "ON" : "OFF", right - 68, y + 3, enabled ? 0xFFFFA04A : 0xFFAA9A91);
             }
-            drawString(fontRendererObj, "[CFG]", right - 37, y + 2, 0xFFFFA34A);
+            drawGear(right - 31, y + 3, 0xFFFFA34A);
         }
         drawString(fontRendererObj, modules.size() + " MODULOS  /  SCROLL PARA NAVEGAR", contentX + 2, bottom - 25, 0xFF9C887F);
     }
@@ -147,6 +147,18 @@ public class ClickGui extends GuiScreen {
             drawOption(x + 10, y + 72, "Background", FpsModule.showBackground);
         } else drawString(fontRendererObj, "Sem opcoes adicionais", x + 10, y + 55, 0xFFB7A69D);
         drawString(fontRendererObj, "[ FECHAR ]", x + 10, y + 108, 0xFFFF963B);
+    }
+
+
+    private void drawGear(int x, int y, int color) {
+        // Pequena engrenagem pixel-art para abrir as configuracoes do modulo.
+        drawRect(x + 3, y, x + 7, y + 10, color);
+        drawRect(x, y + 3, x + 10, y + 7, color);
+        drawRect(x + 1, y + 1, x + 3, y + 3, color);
+        drawRect(x + 7, y + 1, x + 9, y + 3, color);
+        drawRect(x + 1, y + 7, x + 3, y + 9, color);
+        drawRect(x + 7, y + 7, x + 9, y + 9, color);
+        drawRect(x + 4, y + 4, x + 6, y + 6, 0xFF191413);
     }
 
     private void drawOption(int x, int y, String label, boolean enabled) {
