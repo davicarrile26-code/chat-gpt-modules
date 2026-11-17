@@ -142,6 +142,13 @@ public class ClickGui extends GuiScreen {
                 drawSettingLine(184, 230, "Mostrar FPS", FpsModule.showFps);
                 drawSettingLine(184, 264, "Mostrar fundo", FpsModule.showBackground);
                 drawString(fontRendererObj, "As alteracoes sao aplicadas imediatamente.", 184, 310, 0xFF89939F);
+            } else if (settingsModule instanceof FeatureModule
+                    && "Keystrokes".equals(settingsModule.getName())) {
+                FeatureModule keys = (FeatureModule) settingsModule;
+                drawSettingLine(184, 230, "Mostrar WASD", keys.isKeystrokesShowMovement());
+                drawSettingLine(184, 264, "Mostrar SPACE", keys.isKeystrokesShowSpace());
+                drawSettingLine(184, 298, "Mostrar botoes do mouse", keys.isKeystrokesShowMouse());
+                drawString(fontRendererObj, "As mudancas aparecem no HUD imediatamente.", 184, 330, 0xFF89939F);
             } else if (settingsModule instanceof CatalogModule) {
                 drawString(fontRendererObj, "Este recurso ainda nao foi implementado.", 184, 207, 0xFFB7A6A0);
                 drawString(fontRendererObj, "A pagina individual ja esta preparada.", 184, 224, 0xFF89939F);
@@ -349,6 +356,12 @@ public class ClickGui extends GuiScreen {
                         if (inside(mx, my, 180, 214, 470, 252)) FpsModule.showFps = !FpsModule.showFps;
                         else if (inside(mx, my, 180, 248, 470, 286))
                             FpsModule.showBackground = !FpsModule.showBackground;
+                    } else if (settingsModule instanceof FeatureModule
+                            && "Keystrokes".equals(settingsModule.getName())) {
+                        FeatureModule keys = (FeatureModule) settingsModule;
+                        if (inside(mx, my, 180, 214, 470, 252)) keys.toggleKeystrokesShowMovement();
+                        else if (inside(mx, my, 180, 248, 470, 286)) keys.toggleKeystrokesShowSpace();
+                        else if (inside(mx, my, 180, 282, 470, 320)) keys.toggleKeystrokesShowMouse();
                     }
                 } else {
                     for (int i = 0; i < CATEGORIES.length; i++) {
