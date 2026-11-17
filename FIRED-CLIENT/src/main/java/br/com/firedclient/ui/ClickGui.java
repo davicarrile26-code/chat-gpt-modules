@@ -7,6 +7,7 @@ import br.com.firedclient.module.ClientModule;
 import br.com.firedclient.module.impl.FpsModule;
 import br.com.firedclient.module.impl.FeatureModule;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
 
@@ -25,6 +26,7 @@ public class ClickGui extends GuiScreen {
     private int guiOffsetX, guiOffsetY;
     private String selectedCategory = "TODOS";
     private ClientModule settingsModule;
+    private GuiTextField searchField;
 
     @Override public void initGui() {
         // Mantem o painel dentro da area visivel, inclusive em janelas pequenas.
@@ -36,6 +38,10 @@ public class ClickGui extends GuiScreen {
         panelLeft = 0;
         panelTop = 0;
         scroll = 0;
+        searchField = new GuiTextField(9001, fontRendererObj, PANEL_WIDTH - 151, 57, 136, 19);
+        searchField.setMaxStringLength(32);
+        searchField.setEnableBackgroundDrawing(false);
+        searchField.setTextColor(0xFFF0E5DE);
     }
 
     @Override public void handleMouseInput() throws IOException {
@@ -91,8 +97,15 @@ public class ClickGui extends GuiScreen {
             } else if (hovered) drawRect(sideX + 4, y - 4, panelLeft + SIDEBAR_WIDTH - 4, y + 17, 0xFF30191D);
             drawString(fontRendererObj, CATEGORIES[i], sideX + 13, y + 2, active ? 0xFFFF8585 : 0xFFB7A69D);
         }
-        drawString(fontRendererObj, "MODULOS", contentX, panelTop + 62, 0xFFFF4D4D);
-        drawString(fontRendererObj, "Clique para ativar  /  engrenagem para configurar", contentX + 66, panelTop + 62, 0xFF95837A);
+        drawString(fontRendererObj, "MODS", contentX, panelTop + 62, 0xFFFF4D4D);
+        drawString(fontRendererObj, "Clique ativa  /  engrenagem configura", contentX + 43, panelTop + 62, 0xFF95837A);
+        int searchX = right - 151, searchY = panelTop + 57;
+        drawRect(searchX - 1, searchY - 1, right - 13, searchY + 19, 0xFF332020);
+        drawRect(searchX, searchY, right - 14, searchY + 18, 0xFF100D0D);
+        drawString(fontRendererObj, "\u2315", searchX + 5, searchY + 5, 0xFFFF4D4D);
+        searchField.drawTextBox();
+        if (searchField.getText().isEmpty() && !searchField.isFocused())
+            drawString(fontRendererObj, "Pesquisar mods", searchX + 19, searchY + 5, 0xFF8E7D76);
         drawRect(contentX, panelTop + 78, right - 13, bottom - 28, 0xFF191413);
         List<ClientModule> modules = getFilteredModules();
         if (modules.isEmpty()) drawCenteredString(fontRendererObj, "NENHUM MODULO NESTA CATEGORIA",
@@ -124,7 +137,10 @@ public class ClickGui extends GuiScreen {
         for (ClientModule module : FiredClient.MODULES.getModules()) {
             String category = module instanceof CatalogModule ? ((CatalogModule) module).getCategory().toUpperCase()
                     : module instanceof FeatureModule ? ((FeatureModule) module).getCategory().toUpperCase() : "HUD";
-            if ("TODOS".equals(selectedCategory) || selectedCategory.equals(category)) result.add(module);
+            boolean categoryMatch = "TODOS".equals(selectedCategory) || selectedCategory.equals(category);
+            boolean searchMatch = searchField == null || module.getName().toLowerCase()
+                    .contains(searchField.getText().toLowerCase());
+            if (categoryMatch && searchMatch) result.add(module);
         }
         return result;
     }
@@ -181,9 +197,22 @@ public class ClickGui extends GuiScreen {
 
     private boolean inside(int mx, int my, int l, int t, int r, int b) { return mx >= l && mx <= r && my >= t && my <= b; }
 
+    @Override protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (searchField != null && searchField.isFocused()) {
+            if (keyCode == 1) searchField.setFocused(false);
+            else {
+                searchField.textboxKeyTyped(typedChar, keyCode);
+                scroll = 0;
+            }
+            return;
+        }
+        super.keyTyped(typedChar, keyCode);
+    }
+
     @Override protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         mouseX = (int) ((mouseX - guiOffsetX) / guiScale);
         mouseY = (int) ((mouseY - guiOffsetY) / guiScale);
+        if (searchField != null) searchField.mouseClicked(mouseX, mouseY, mouseButton);
         if (mouseButton == 0) {
             int right = panelLeft + PANEL_WIDTH;
             if (inside(mouseX, mouseY, panelLeft + 330, panelTop + 13, panelLeft + 400, panelTop + 37)) {
