@@ -26,6 +26,8 @@ public class ModuleManager {
         register(new FeatureModule("Potion Effects", "HUD"));
         register(new FeatureModule("Toggle Sprint", "MOVEMENT"));
         register(new FeatureModule("Fullbright", "RENDER"));
+        register(new FeatureModule("Aura", "COSMETICS"));
+        register(new FeatureModule("Trails", "COSMETICS"));
 
         register(new FeatureModule("Keystrokes", "HUD"));
         register(new FeatureModule("Stopwatch", "HUD"));
@@ -65,8 +67,6 @@ public class ModuleManager {
             {"Clear Water","Render"},
             {"Kill Effects","Cosmetics"},
             {"Target ESP","Render"},
-            {"Trails","Cosmetics"},
-            {"Aura","Render"},
             {"Trajectories","Render"},
             {"Ambience","World"},
             {"Title Tweaks","HUD"},
