@@ -4,6 +4,9 @@ import br.com.firedclient.module.ClientModule;
 import br.com.firedclient.module.HudModule;
 import br.com.firedclient.module.TickModule;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.input.Mouse;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -65,9 +68,13 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
     public void render(RenderGameOverlayEvent.Text event) {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc == null || mc.thePlayer == null || mc.theWorld == null) return;
+        if ("Keystrokes".equals(getName())) {
+            renderKeystrokes(mc);
+            return;
+        }
         String value = getHudValue(mc);
         if (value != null && value.length() > 0)
-            mc.fontRendererObj.drawStringWithShadow(value, 4, getHudY(), 0xFFFFA04A);
+            mc.fontRendererObj.drawStringWithShadow(value, 4, getHudY(), 0xFFFF4D4D);
     }
 
     private int getHudY() {
@@ -130,13 +137,7 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
         }
         if ("Potion Effects".equals(n))
             return "Efeitos: " + mc.thePlayer.getActivePotionEffects().size();
-        if ("Keystrokes".equals(n)) {
-            return "Teclas: W " + key(mc.gameSettings.keyBindForward.isKeyDown())
-                    + " A " + key(mc.gameSettings.keyBindLeft.isKeyDown())
-                    + " S " + key(mc.gameSettings.keyBindBack.isKeyDown())
-                    + " D " + key(mc.gameSettings.keyBindRight.isKeyDown())
-                    + " J " + key(mc.gameSettings.keyBindJump.isKeyDown());
-        }
+        if ("Keystrokes".equals(n)) return null;
         if ("Stopwatch".equals(n)) {
             long seconds = Math.max(0L, (System.currentTimeMillis() - stopwatchStarted) / 1000L);
             return String.format("Cronometro: %02d:%02d", seconds / 60L, seconds % 60L);
@@ -188,5 +189,28 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
         return null;
     }
 
-    private String key(boolean down) { return down ? "[X]" : "[ ]"; }
+    private void renderKeystrokes(Minecraft mc) {
+        ScaledResolution sr = new ScaledResolution(mc);
+        int keyW = 24, keyH = 22, gap = 3;
+        int x = 6, y = sr.getScaledHeight() - 6 - (keyH * 4 + gap * 3);
+        drawKey(mc, x + keyW + gap, y, keyW, keyH, "W", mc.gameSettings.keyBindForward.isKeyDown());
+        drawKey(mc, x, y + keyH + gap, keyW, keyH, "A", mc.gameSettings.keyBindLeft.isKeyDown());
+        drawKey(mc, x + keyW + gap, y + keyH + gap, keyW, keyH, "S", mc.gameSettings.keyBindBack.isKeyDown());
+        drawKey(mc, x + (keyW + gap) * 2, y + keyH + gap, keyW, keyH, "D", mc.gameSettings.keyBindRight.isKeyDown());
+        drawKey(mc, x, y + (keyH + gap) * 2, keyW * 3 + gap * 2, keyH, "SPACE",
+                mc.gameSettings.keyBindJump.isKeyDown());
+        int mouseY = y + (keyH + gap) * 3;
+        drawKey(mc, x, mouseY, keyW + 10, keyH, "LMB", Mouse.isButtonDown(0));
+        drawKey(mc, x + keyW + gap + 10, mouseY, keyW + 10, keyH, "RMB", Mouse.isButtonDown(1));
+    }
+
+    private void drawKey(Minecraft mc, int x, int y, int w, int h, String label, boolean pressed) {
+        Gui.drawRect(x, y, x + w, y + h, 0xD9100D0D);
+        Gui.drawRect(x, y, x + w, y + 2, pressed ? 0xFFFF343F : 0xFF552027);
+        Gui.drawRect(x, y + h - 1, x + w, y + h, 0xFF080606);
+        int color = pressed ? 0xFFFFFFFF : 0xFFCCBDBD;
+        int textX = x + (w - mc.fontRendererObj.getStringWidth(label)) / 2;
+        int textY = y + (h - mc.fontRendererObj.FONT_HEIGHT) / 2;
+        mc.fontRendererObj.drawStringWithShadow(label, textX, textY, color);
+    }
 }
