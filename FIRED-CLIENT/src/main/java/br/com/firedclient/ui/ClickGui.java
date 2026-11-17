@@ -4,6 +4,7 @@ import br.com.firedclient.FiredClient;
 import br.com.firedclient.module.CatalogModule;
 import br.com.firedclient.module.ClientModule;
 import br.com.firedclient.module.impl.FpsModule;
+import br.com.firedclient.module.impl.FeatureModule;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
@@ -140,7 +141,8 @@ public class ClickGui extends GuiScreen {
 
             if (hovered) drawRect(contentX + 5, y - 3, right - 18, y + 19, 0xFF2B201C);
             String category = module instanceof CatalogModule
-                    ? ((CatalogModule) module).getCategory().toUpperCase() : "HUD";
+                    ? ((CatalogModule) module).getCategory().toUpperCase()
+                    : (module instanceof FeatureModule ? ((FeatureModule) module).getCategory() : "HUD");
             drawString(fontRendererObj, module.getName(), contentX + 12, y + 2, 0xFFF0E5DE);
             drawString(fontRendererObj, category, contentX + 145, y + 2, 0xFF9D8980);
 
