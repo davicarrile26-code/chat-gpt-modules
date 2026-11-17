@@ -23,6 +23,16 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
     private boolean changedGamma;
     private long stopwatchStarted;
     private int cosmeticTick;
+    private boolean keystrokesShowMovement = true;
+    private boolean keystrokesShowSpace = true;
+    private boolean keystrokesShowMouse = true;
+
+    public boolean isKeystrokesShowMovement() { return keystrokesShowMovement; }
+    public void toggleKeystrokesShowMovement() { keystrokesShowMovement = !keystrokesShowMovement; }
+    public boolean isKeystrokesShowSpace() { return keystrokesShowSpace; }
+    public void toggleKeystrokesShowSpace() { keystrokesShowSpace = !keystrokesShowSpace; }
+    public boolean isKeystrokesShowMouse() { return keystrokesShowMouse; }
+    public void toggleKeystrokesShowMouse() { keystrokesShowMouse = !keystrokesShowMouse; }
 
     public FeatureModule(String name, String category) {
         super(name);
@@ -212,16 +222,28 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
     private void renderKeystrokes(Minecraft mc) {
         ScaledResolution sr = new ScaledResolution(mc);
         int keyW = 24, keyH = 22, gap = 3;
-        int x = 6, y = sr.getScaledHeight() - 6 - (keyH * 4 + gap * 3);
-        drawKey(mc, x + keyW + gap, y, keyW, keyH, "W", mc.gameSettings.keyBindForward.isKeyDown());
-        drawKey(mc, x, y + keyH + gap, keyW, keyH, "A", mc.gameSettings.keyBindLeft.isKeyDown());
-        drawKey(mc, x + keyW + gap, y + keyH + gap, keyW, keyH, "S", mc.gameSettings.keyBindBack.isKeyDown());
-        drawKey(mc, x + (keyW + gap) * 2, y + keyH + gap, keyW, keyH, "D", mc.gameSettings.keyBindRight.isKeyDown());
-        drawKey(mc, x, y + (keyH + gap) * 2, keyW * 3 + gap * 2, keyH, "SPACE",
-                mc.gameSettings.keyBindJump.isKeyDown());
-        int mouseY = y + (keyH + gap) * 3;
-        drawKey(mc, x, mouseY, keyW + 10, keyH, "LMB", Mouse.isButtonDown(0));
-        drawKey(mc, x + keyW + gap + 10, mouseY, keyW + 10, keyH, "RMB", Mouse.isButtonDown(1));
+        int x = 6;
+        int rows = (keystrokesShowMovement ? 2 : 0) + (keystrokesShowSpace ? 1 : 0)
+                + (keystrokesShowMouse ? 1 : 0);
+        int totalHeight = rows * keyH + Math.max(0, rows - 1) * gap;
+        int y = sr.getScaledHeight() - 6 - totalHeight;
+
+        if (keystrokesShowMovement) {
+            drawKey(mc, x + keyW + gap, y, keyW, keyH, "W", mc.gameSettings.keyBindForward.isKeyDown());
+            drawKey(mc, x, y + keyH + gap, keyW, keyH, "A", mc.gameSettings.keyBindLeft.isKeyDown());
+            drawKey(mc, x + keyW + gap, y + keyH + gap, keyW, keyH, "S", mc.gameSettings.keyBindBack.isKeyDown());
+            drawKey(mc, x + (keyW + gap) * 2, y + keyH + gap, keyW, keyH, "D", mc.gameSettings.keyBindRight.isKeyDown());
+            y += (keyH + gap) * 2;
+        }
+        if (keystrokesShowSpace) {
+            drawKey(mc, x, y, keyW * 3 + gap * 2, keyH, "SPACE",
+                    mc.gameSettings.keyBindJump.isKeyDown());
+            y += keyH + gap;
+        }
+        if (keystrokesShowMouse) {
+            drawKey(mc, x, y, keyW + 10, keyH, "LMB", Mouse.isButtonDown(0));
+            drawKey(mc, x + keyW + gap + 10, y, keyW + 10, keyH, "RMB", Mouse.isButtonDown(1));
+        }
     }
 
     private void drawKey(Minecraft mc, int x, int y, int w, int h, String label, boolean pressed) {
