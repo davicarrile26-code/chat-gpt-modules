@@ -10,6 +10,7 @@ import org.lwjgl.input.Mouse;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
     private float previousGamma;
     private boolean changedGamma;
     private long stopwatchStarted;
+    private int cosmeticTick;
 
     public FeatureModule(String name, String category) {
         super(name);
@@ -61,6 +63,24 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
             boolean canSprint = player.getFoodStats().getFoodLevel() > 6
                     && !player.isSneaking() && !player.isCollidedHorizontally;
             if (movingForward && canSprint) player.setSprinting(true);
+        } else if ("Trails".equals(getName())) {
+            if (++cosmeticTick % 2 == 0 && (Math.abs(mc.thePlayer.motionX) > 0.01D
+                    || Math.abs(mc.thePlayer.motionZ) > 0.01D)) {
+                mc.theWorld.spawnParticle(EnumParticleTypes.FLAME, mc.thePlayer.posX,
+                        mc.thePlayer.posY + 0.08D, mc.thePlayer.posZ, 0.0D, 0.015D, 0.0D);
+            }
+        } else if ("Aura".equals(getName())) {
+            if (++cosmeticTick % 4 == 0) {
+                double base = cosmeticTick * 0.12D;
+                for (int i = 0; i < 12; i++) {
+                    double angle = base + Math.PI * 2.0D * i / 12.0D;
+                    double px = mc.thePlayer.posX + Math.cos(angle) * 0.72D;
+                    double pz = mc.thePlayer.posZ + Math.sin(angle) * 0.72D;
+                    double py = mc.thePlayer.posY + 0.25D + (i % 3) * 0.42D;
+                    mc.theWorld.spawnParticle(EnumParticleTypes.FLAME, px, py, pz,
+                            0.0D, 0.012D, 0.0D);
+                }
+            }
         }
     }
 
