@@ -36,7 +36,9 @@ public class ClickGui extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if (mouseButton == 0 && mouseX >= panelLeft && mouseX <= panelLeft + 220) {
+        if (mouseButton == 0 && mouseX >= panelLeft && mouseX <= panelLeft + 220
+                && mouseY >= panelTop + 36
+                && mouseY < panelTop + 36 + FiredClient.MODULES.getModules().size() * 20) {
             int index = (mouseY - (panelTop + 36)) / 20;
             if (index >= 0 && index < FiredClient.MODULES.getModules().size())
                 FiredClient.MODULES.getModules().get(index).toggle();
