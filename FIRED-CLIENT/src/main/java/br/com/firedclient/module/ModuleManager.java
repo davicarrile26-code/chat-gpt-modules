@@ -28,6 +28,7 @@ public class ModuleManager {
         register(new FeatureModule("Fullbright", "RENDER"));
         register(new FeatureModule("Aura", "COSMETICS"));
         register(new FeatureModule("Trails", "COSMETICS"));
+        register(new FeatureModule("Nametags", "RENDER"));
 
         register(new FeatureModule("Keystrokes", "HUD"));
         register(new FeatureModule("Stopwatch", "HUD"));
@@ -72,7 +73,6 @@ public class ModuleManager {
             {"Title Tweaks","HUD"},
             {"Bossbar Tweaks","HUD"},
             {"Scoreboard Tweaks","HUD"},
-            {"Nametags","Render"},
             {"Dynamic Island","HUD"},
             {"Client","Misc"},
             {"Theme","Cosmetics"},
