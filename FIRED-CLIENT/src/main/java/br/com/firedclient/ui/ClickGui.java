@@ -276,10 +276,7 @@ public class ClickGui extends GuiScreen {
         drawString(fontRendererObj, "COSMETICOS", 164, 72, 0xFFF3F4F6);
         drawString(fontRendererObj, "Escolha efeitos visuais para seu personagem", 164, 86, 0xFF7F8995);
         for (int i = 0; i < COSMETIC_SECTIONS.length; i++) {
-            int col = i % 3;
-            int row = i / 3;
-            int x = 164 + col * 178;
-            int y = 122 + row * 112;
+            int col = i % 3, row = i / 3, x = 164 + col * 178, y = 122 + row * 112;
             boolean active = selectedCosmeticSection == i;
             boolean hovered = inside(mouseX, mouseY, x, y, x + 164, y + 92);
             drawRect(x, y, x + 164, y + 92, active ? 0xFF382126 : hovered ? 0xFF242B34 : 0xFF1B2027);
@@ -289,10 +286,26 @@ public class ClickGui extends GuiScreen {
             drawString(fontRendererObj, COSMETIC_SECTIONS[i], x + 60, y + 17, 0xFFF0F2F5);
             ClientModule effect = i == 3 ? FiredClient.MODULES.getByName("Trails")
                     : i == 4 ? FiredClient.MODULES.getByName("Aura") : null;
-            String status = effect == null ? "COLECAO" : effect.isEnabled() ? "ATIVO" : "DISPONIVEL";
+            String status = i == 0 ? "3 CAPAS" : effect == null ? "COLECAO"
+                    : effect.isEnabled() ? "ATIVO" : "DISPONIVEL";
             drawString(fontRendererObj, status, x + 60, y + 35,
                     effect != null && effect.isEnabled() ? 0xFFFF7654 : 0xFF89939F);
             drawString(fontRendererObj, "ABRIR", x + 13, y + 69, 0xFFFF9277);
+        }
+        if (selectedCosmeticSection == 0) {
+            drawRect(164, 244, 698, 338, 0xFF171C23);
+            drawString(fontRendererObj, "CAPAS DISPONIVEIS", 178, 253, 0xFFFF7654);
+            String[] names = {"FIRED FLAME", "ROYAL EMBER", "INFERNO"};
+            String[] ids = {"fired_flame", "royal_ember", "inferno_stripes"};
+            for (int i = 0; i < names.length; i++) {
+                int x = 178 + i * 171;
+                boolean equipped = br.com.firedclient.cosmetic.CapeManager.getSelectedCape().equals(ids[i]);
+                drawRect(x, 273, x + 158, 326, equipped ? 0xFF492329 : 0xFF242B34);
+                drawRect(x, 273, x + 158, 275, equipped ? 0xFFFF573D : 0xFF3A424D);
+                drawString(fontRendererObj, names[i], x + 9, 285, 0xFFF0F2F5);
+                drawString(fontRendererObj, equipped ? "SELECIONADA" : "CLIQUE PARA EQUIPAR",
+                        x + 9, 304, equipped ? 0xFFFF9277 : 0xFF9AA4AF);
+            }
         }
         drawRect(164, 350, 698, 391, 0xFF1B2027);
         drawString(fontRendererObj, "STATUS DO CLIENT", 178, 359, 0xFFFF7654);
@@ -401,16 +414,22 @@ public class ClickGui extends GuiScreen {
                     }
                 }
             } else if (tab == TAB_COSMETICS) {
+                boolean clickedSection = false;
                 for (int i = 0; i < COSMETIC_SECTIONS.length; i++) {
-                    int x = 164 + (i % 3) * 178;
-                    int y = 122 + (i / 3) * 112;
+                    int x = 164 + (i % 3) * 178, y = 122 + (i / 3) * 112;
                     if (inside(mx, my, x, y, x + 164, y + 92)) {
                         selectedCosmeticSection = i;
                         ClientModule effect = i == 3 ? FiredClient.MODULES.getByName("Trails")
                                 : i == 4 ? FiredClient.MODULES.getByName("Aura") : null;
                         if (effect != null) effect.toggle();
+                        clickedSection = true;
                         break;
                     }
+                }
+                if (!clickedSection && selectedCosmeticSection == 0 && inside(mx, my, 178, 273, 678, 326)) {
+                    if (mx < 336) br.com.firedclient.cosmetic.CapeManager.selectCape("fired_flame");
+                    else if (mx < 507) br.com.firedclient.cosmetic.CapeManager.selectCape("royal_ember");
+                    else br.com.firedclient.cosmetic.CapeManager.selectCape("inferno_stripes");
                 }
             }
         }
