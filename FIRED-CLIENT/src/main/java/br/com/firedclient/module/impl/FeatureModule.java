@@ -26,6 +26,7 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
     private boolean keystrokesShowMovement = true;
     private boolean keystrokesShowSpace = true;
     private boolean keystrokesShowMouse = true;
+    private boolean nametagsShowFiredIcon = true;
 
     public boolean isKeystrokesShowMovement() { return keystrokesShowMovement; }
     public void toggleKeystrokesShowMovement() { keystrokesShowMovement = !keystrokesShowMovement; }
@@ -33,6 +34,8 @@ public class FeatureModule extends ClientModule implements HudModule, TickModule
     public void toggleKeystrokesShowSpace() { keystrokesShowSpace = !keystrokesShowSpace; }
     public boolean isKeystrokesShowMouse() { return keystrokesShowMouse; }
     public void toggleKeystrokesShowMouse() { keystrokesShowMouse = !keystrokesShowMouse; }
+    public boolean isNametagsShowFiredIcon() { return nametagsShowFiredIcon; }
+    public void toggleNametagsShowFiredIcon() { nametagsShowFiredIcon = !nametagsShowFiredIcon; }
 
     public FeatureModule(String name, String category) {
         super(name);
