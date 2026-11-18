@@ -149,6 +149,12 @@ public class ClickGui extends GuiScreen {
                 drawSettingLine(184, 264, "Mostrar SPACE", keys.isKeystrokesShowSpace());
                 drawSettingLine(184, 298, "Mostrar botoes do mouse", keys.isKeystrokesShowMouse());
                 drawString(fontRendererObj, "As mudancas aparecem no HUD imediatamente.", 184, 330, 0xFF89939F);
+            } else if (settingsModule instanceof FeatureModule
+                    && "Nametags".equals(settingsModule.getName())) {
+                FeatureModule nametags = (FeatureModule) settingsModule;
+                drawSettingLine(184, 230, "Mostrar icone FIRED no meu nick", nametags.isNametagsShowFiredIcon());
+                drawString(fontRendererObj, "O icone tem tamanho fixo. Para reconhecer outros", 184, 270, 0xFF89939F);
+                drawString(fontRendererObj, "clientes FIRED, o servidor precisa retransmitir o sinal.", 184, 286, 0xFF89939F);
             } else if (settingsModule instanceof CatalogModule) {
                 drawString(fontRendererObj, "Este recurso ainda nao foi implementado.", 184, 207, 0xFFB7A6A0);
                 drawString(fontRendererObj, "A pagina individual ja esta preparada.", 184, 224, 0xFF89939F);
@@ -362,6 +368,10 @@ public class ClickGui extends GuiScreen {
                         if (inside(mx, my, 180, 214, 470, 252)) keys.toggleKeystrokesShowMovement();
                         else if (inside(mx, my, 180, 248, 470, 286)) keys.toggleKeystrokesShowSpace();
                         else if (inside(mx, my, 180, 282, 470, 320)) keys.toggleKeystrokesShowMouse();
+                    } else if (settingsModule instanceof FeatureModule
+                            && "Nametags".equals(settingsModule.getName())) {
+                        FeatureModule nametags = (FeatureModule) settingsModule;
+                        if (inside(mx, my, 180, 214, 470, 252)) nametags.toggleNametagsShowFiredIcon();
                     }
                 } else {
                     for (int i = 0; i < CATEGORIES.length; i++) {
