@@ -1,6 +1,7 @@
 package br.com.firedclient;
 
 import br.com.firedclient.module.ModuleManager;
+import br.com.firedclient.module.impl.NametagRenderer;
 import br.com.firedclient.ui.ClickGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -29,6 +30,7 @@ public class FiredClient {
         ClientRegistry.registerKeyBinding(guiKey);
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(MODULES);
+        MinecraftForge.EVENT_BUS.register(new NametagRenderer());
     }
 
     @SubscribeEvent
